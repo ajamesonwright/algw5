@@ -1,20 +1,29 @@
 import java.util.ArrayList;
 
-public class KdTree<Key extends Comparable<Key>, Value> {
+import edu.princeton.cs.algs4.BST;
+
+public class KdTree<T extends Comparable<T>> {
     
     private class Node
     {
         private Point2D p;
-        private Key x;
-        private Key y;
+        private T x;
+        private T y;
         private Node left, right;
+        private int size;
         private int count;
         
-        public Node(Key x, Key y)
+        public Node(T x, T y, int size)
         {
+            if (x == null || y == null)
+            {
+                throw new IllegalArgumentException("Node constructor arguments cannot be null.");
+            }
+
             p = new Point2D((Double) x, (Double) y);
             this.x = x;
             this.y = y;
+            this.size = size;
         }
 
         public String toString()
@@ -30,7 +39,6 @@ public class KdTree<Key extends Comparable<Key>, Value> {
     }
 
     private Node root;
-    private boolean compareOnY = false;
     private int depth;
 
     public boolean isEmpty()
@@ -49,27 +57,35 @@ public class KdTree<Key extends Comparable<Key>, Value> {
         {
             return 0;
         }
-        return n.count;
+        return n.size;
     }
 
-    public void put(Key x, Key y)
+    public boolean contains(T x, T y)
+    {
+        if (x == null)
+        {
+            throw new IllegalArgumentException("'contains()' argument cannot be null");
+        }
+
+        return get(x, y) != null;
+    }
+
+    public void put(T x, T y)
     {
         if (x == null || y == null)
         {
             throw new IllegalArgumentException("Point input arguments cannot be null");
         }
 
-
         depth = 0;
         root = put(root, x, y);
-        compareOnY = !compareOnY;
     }
 
-    private Node put(Node n, Key x, Key y)
+    private Node put(Node n, T x, T y)
     {
         if (n == null)
         {
-            return new Node(x, y);
+            return new Node(x, y, 1);
         }
 
         int cmp;
@@ -91,12 +107,12 @@ public class KdTree<Key extends Comparable<Key>, Value> {
             n.right = put(n.right, x, y);   // equal comparators placed to the right by convention
         }
 
-        n.count = 1 + size(n.left) + size(n.right);
+        n.size = 1 + size(n.left) + size(n.right);
 
         return n;
     }
 
-    public Key get(Key x, Key y)
+    public T get(T x, T y)
     {
         Node n = root;
         int cmp;
@@ -117,9 +133,9 @@ public class KdTree<Key extends Comparable<Key>, Value> {
         return null;
     }
     
-    public Iterable<Node> iterator()
+    public Iterable<Node> lrIterator()
     {
-        ArrayList<Node> al = new ArrayList<Node>();
+        ArrayList<Node> al = new ArrayList<>();
         inorder(root, al);
         return al;
     }
@@ -139,16 +155,21 @@ public class KdTree<Key extends Comparable<Key>, Value> {
     {
         StringBuilder sb = new StringBuilder();
 
-        for (Node n : iterator())
+        for (Node n : lrIterator())
         {
             sb.append(n.toString() + "\n");
         }
 
         return sb.toString();
     }
+
+    public String toTree()
+    {
+        return "";
+    }
     public static void main(String[] args)
     {
-        KdTree<Double, Double> kd = new KdTree<>();
+        KdTree<Double> kd = new KdTree<>();
 
         kd.put(0.5, 0.5);
         kd.put(0.3, 0.3);
@@ -158,11 +179,30 @@ public class KdTree<Key extends Comparable<Key>, Value> {
         kd.put(0.6, 0.6);
         kd.put(0.8, 0.8);
 
-        Double d = kd.get(0.1, 0.1);
-        System.out.println("Get (0.1, 0.1): " + d);
+        Double d = kd.get(0.2, 0.2);
+        System.out.println("Get (0.2, 0.2): " + d);
+
+        System.out.println("kd contains ( 0.3, 0.3 ): " + kd.contains(0.3, 0.3));
+
+        System.out.println("kd contains ( 0.3, 0.2 ): " + kd.contains(0.3, 0.2));
 
         System.out.println(kd.root.toString() + "\n\n");
 
+        //System.out.println(kd.toString());
+
+        kd = new KdTree<>();
+        kd.put(0.5, 0.6);
+        kd.put(0.2, 0.7);
+        kd.put(0.1, 0.8);
+        kd.put(0.1, 0.6);
         System.out.println(kd.toString());
+        System.out.println(kd.size());
+        System.out.println(kd.root.toString());
+
+        BST<Double, Double> tree = new BST<>();
+
+        System.out.println("Tree size: " + tree.size());
+        tree.put(0.5, 0.6);
+        System.out.println("Tree size: " + tree.size());
     }
 }
