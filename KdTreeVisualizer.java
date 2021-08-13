@@ -8,9 +8,7 @@
  *
  ******************************************************************************/
 
- /*
-import edu.princeton.cs.algs4.Point2D;
-import edu.princeton.cs.algs4.RectHV;
+
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
 
@@ -19,9 +17,12 @@ public class KdTreeVisualizer {
     public static void main(String[] args) {
         RectHV rect = new RectHV(0.0, 0.0, 1.0, 1.0);
         StdDraw.enableDoubleBuffering();
-        KdTree kdtree = new KdTree();
+        KdTree<Double> kdtree = new KdTree<Double>();
+        boolean mouseHeldDown = false;
+
         while (true) {
-            if (StdDraw.isMousePressed()) {
+            if (StdDraw.isMousePressed() && !mouseHeldDown) {
+                mouseHeldDown = true;
                 double x = StdDraw.mouseX();
                 double y = StdDraw.mouseY();
                 StdOut.printf("%8.6f %8.6f\n", x, y);
@@ -34,9 +35,15 @@ public class KdTreeVisualizer {
                     StdDraw.show();
                 }
             }
+            while (mouseHeldDown)
+            {
+                if (!StdDraw.isMousePressed())
+                {
+                    mouseHeldDown = false;
+                }
+            }
             StdDraw.pause(20);
         }
 
     }
 }
-*/

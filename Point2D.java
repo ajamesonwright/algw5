@@ -27,6 +27,11 @@ public class Point2D implements Comparable<Point2D>{
 
     public double distanceTo(Point2D that)
     {
+        if (that == null)
+        {
+            return Double.POSITIVE_INFINITY;
+        }
+        
         double dx = this.x - that.x;
         double dy = this.y - that.y;
         return Math.sqrt(dx * dx + dy * dy);
@@ -34,6 +39,11 @@ public class Point2D implements Comparable<Point2D>{
 
     public double distanceSquaredTo(Point2D that)
     {
+        if (that == null)
+        {
+            return Double.POSITIVE_INFINITY;
+        }
+
         double dx = this.x - that.x;
         double dy = this.y - that.y;
         return dx * dx + dy * dy;
@@ -46,6 +56,22 @@ public class Point2D implements Comparable<Point2D>{
         if (this.x() < that.x())    return -1;
         if (this.x() > that.x())    return 1;
         
+        return 0;
+    }
+
+    public int compareToX(Point2D that)
+    {
+        if (this.x() < that.x())    return -1;
+        if (this.x() > that.x())    return 1;
+        
+        return 0;
+    }
+
+    public int compareToY(Point2D that)
+    {
+        if (this.y() < that.y())    return -1;
+        if (this.y() > that.y())    return 1;
+
         return 0;
     }
 

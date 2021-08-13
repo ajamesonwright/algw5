@@ -94,6 +94,7 @@ public class RectHV {
 
     public void draw()
     {
+        StdDraw.setPenColor(StdDraw.BLACK);
         StdDraw.line(xmin, ymin, xmax, ymin);
         StdDraw.line(xmax, ymin, xmax, ymax);
         StdDraw.line(xmax, ymax, xmin, ymax);
